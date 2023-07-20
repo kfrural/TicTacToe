@@ -25,17 +25,69 @@ char** criaTabuleiro(int tam){
     return tabuleiro;
 }
 
+char verificaGanhador(char** tabuleiro, int tam){
+    for(int i = 0; i < tam; i++){
+        if(tabuleiro[i][0] == tabuleiro[i][1] && tabuleiro[i][1] == tabuleiro[i][2] && tabuleiro[i][0] != ' '){
+            return tabuleiro[i][0];
+        }
+    }
+    for(int j = 0; j < tam; j++){
+        if(tabuleiro[0][j] == tabuleiro[1][j] && tabuleiro[1][j] == tabuleiro[2][j] && tabuleiro[0][j] != ' '){
+            return tabuleiro[0][j];
+        }
+    }
+    
+    if(tabuleiro[0][0] == tabuleiro[1][1] && tabuleiro[1][1] == tabuleiro[2][2] && tabuleiro[0][0] != ' '){
+        return tabuleiro[0][0];
+    }
+    if(tabuleiro[0][2] == tabuleiro[1][1] && tabuleiro[1][1] == tabuleiro[2][0] && tabuleiro[0][2] != ' '){
+        return tabuleiro[0][2];
+    }
+    
+    return ' ';
+}
+
 int main(){
     int tam = 3;
     char** tabuleiro = criaTabuleiro(tam);
     bool playerX = true;
     int linha = 0;
     int coluna = 0;
+    char vencedor;
     
     cout << "----------JOGOZIN DA VELHA----------\n\n";
     
-    printTabuleiro(tabuleiro, tam);
+    do{
+        printTabuleiro(tabuleiro, tam);
+        
+        if(playerX){
+            cout << "Jogador X \n Digite a linha: ";
+            cin >> linha;
+            cout << "Digite a coluna: ";
+            cin >> coluna;
+        }else{
+            cout << "Jogador O \n Digite a linha: ";
+            cin >> linha;
+            cout << "Digite a coluna: ";
+            cin >> coluna;
+        }
+        if(linha < 0 || linha >= tam || coluna < 0 || coluna >= tam || tabuleiro[linha-1][coluna-1] != ' '){
+            cout << "Jogada inválida! Tente novamente.\n";
+            continue;
+        }
+        if(playerX){
+            tabuleiro[linha-1][coluna-1] = 'X';
+        } else {
+            tabuleiro[linha-1][coluna-1] = 'O';
+        }
+        vencedor = verificaGanhador(tabuleiro, tam);
+        if(vencedor != ' '){
+            printTabuleiro(tabuleiro, tam);
+            cout << "Jogador " << vencedor << " venceu o jogo!\n";
+        }
+    }while(vencedor != ' ');
     
+    playerX =  !playerX;
 
     return 0;
 }
