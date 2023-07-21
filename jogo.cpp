@@ -47,6 +47,17 @@ char verificaGanhador(char** tabuleiro, int tam){
     return ' ';
 }
 
+bool tabuleiroEmpate(char** tabuleiro, int tam){
+    for(int i = 0; i < tam; i++){
+        for(int j = 0; j < tam; j++){
+            if(tabuleiro[i][j] == ' '){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 int main(){
     int tam = 3;
     char** tabuleiro = criaTabuleiro(tam);
@@ -54,6 +65,7 @@ int main(){
     int linha = 0;
     int coluna = 0;
     char vencedor;
+    bool jogoFinal = false;
     
     cout << "----------JOGOZIN DA VELHA----------\n\n";
     
@@ -71,7 +83,7 @@ int main(){
             cout << "Digite a coluna: ";
             cin >> coluna;
         }
-        if(linha < 0 || linha >= tam || coluna < 0 || coluna >= tam || tabuleiro[linha-1][coluna-1] != ' '){
+        if(linha < 1 || linha > tam || coluna < 1 || coluna > tam || tabuleiro[linha - 1][coluna - 1] != ' '){
             cout << "Jogada inválida! Tente novamente.\n";
             continue;
         }
@@ -83,11 +95,16 @@ int main(){
         vencedor = verificaGanhador(tabuleiro, tam);
         if(vencedor != ' '){
             printTabuleiro(tabuleiro, tam);
-            cout << "Jogador " << vencedor << " venceu o jogo!\n";
+            cout << "Jogador " << vencedor << " ganhou esse trem!\n";
+            jogoFinal = true;
+        }else if(tabuleiroEmpate(tabuleiro, tam)){
+            printTabuleiro(tabuleiro, tam);
+            cout << "EMPATE!\n";
+            jogoFinal = true;
         }
-    }while(vencedor != ' ');
+        playerX = !playerX;
+    }while(!jogoFinal);
     
-    playerX =  !playerX;
 
     return 0;
 }
